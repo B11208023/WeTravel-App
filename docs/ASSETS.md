@@ -9,7 +9,9 @@
 把新圖拖進想換的格子（或點「選擇圖片…」），拖動／縮放調整裁切位置，按「確認替換」即完成。
 換錯了按格子上的「還原上一版」。第一次雙擊會自動安裝相依套件（約 1 分鐘）。
 
-**Mac／Linux**：`cd tools && npm install`（第一次）後 `node gui.mjs`，瀏覽器自動開啟。
+**Mac／Linux**：雙擊 repo 根目錄的「`換素材工具-Mac.command`」（第一次若被 Gatekeeper 擋，右鍵 → 打開），
+或在終端機 `cd` 到 repo 根目錄後執行 `node tools/start.mjs`——同樣會自動安裝相依套件再開素材牆。
+（直接跑 `node tools/gui.mjs` 不會自動安裝，沒先 `cd tools && npm install` 會丟 `Cannot find package 'sharp'`。）
 
 畫面上方狀態列全綠（✅ 24 張全部合格）就代表沒問題；紅框卡片會用中文寫出原因。
 

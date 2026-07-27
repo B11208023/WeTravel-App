@@ -201,7 +201,7 @@ function openBrowser(url) {
   execFile(cmd, args, () => {}); // 開不了瀏覽器不算致命，終端機有印網址
 }
 
-async function main() {
+export async function main() {
   const server = createServer(REPO_ROOT);
   let port = null;
   for (let p = 4646; p <= 4656; p++) {

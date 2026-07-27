@@ -342,3 +342,30 @@ async function makeIconRoot() {
   assert.ok(!/(^|[^\r])\n/.test(text), '.bat 行尾必須全 CRLF（cmd 解析是 CRLF 原生）');
   console.log('PASS .bat ASCII＋CRLF 不變式');
 }
+
+// —— Mac 入口不變式：.command 必須 shebang 開頭＋LF-only＋有執行權限 ——
+// bash 讀到 CRLF 會把 \r 當成指令的一部分（`node\r: command not found`），
+// 少執行權限則雙擊變成用文字編輯器開啟。兩者都是 Mac 用戶端無法自救的卡關。
+{
+  const { fileURLToPath: f2p } = await import('node:url');
+  const { statSync } = await import('node:fs');
+  const repoRoot = path.resolve(path.dirname(f2p(import.meta.url)), '..');
+  const cmdPath = path.join(repoRoot, '換素材工具-Mac.command');
+  const cmd = readFileSync(cmdPath).toString('utf8');
+  assert.ok(cmd.startsWith('#!/bin/bash\n'), '.command 必須以 bash shebang 開頭');
+  assert.ok(!cmd.includes('\r'), '.command 不准有 CR（bash 會把 \\r 併進指令）');
+  assert.ok(cmd.includes('node tools/start.mjs'), '.command 要走 start.mjs（含自動安裝）');
+  assert.ok(statSync(cmdPath).mode & 0o111, '.command 必須有執行權限（否則雙擊只會被文字編輯器開啟）');
+  console.log('PASS .command shebang＋LF＋執行權限不變式');
+}
+
+// —— 入口不變式：start.mjs 缺 node_modules 時要能自己補齊 ——
+// 只做靜態檢查（真跑 npm install 太慢），確保三件事沒被改掉：偵測 sharp、呼叫 npm install、啟動 main()
+{
+  const { fileURLToPath: f2p } = await import('node:url');
+  const src = readFileSync(path.join(path.dirname(f2p(import.meta.url)), 'start.mjs'), 'utf8');
+  assert.ok(src.includes("'node_modules', 'sharp'"), 'start.mjs 要偵測 sharp 是否已安裝');
+  assert.ok(/spawnSync\([^)]*npm/.test(src), 'start.mjs 缺套件時要跑 npm install');
+  assert.ok(src.includes('await main()'), 'start.mjs 要接著啟動 GUI');
+  console.log('PASS start.mjs 自動安裝入口不變式');
+}

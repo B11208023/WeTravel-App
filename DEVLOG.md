@@ -13,6 +13,19 @@
 
 ---
 
+## 2026-07-27（🐛→✅ Mac 用戶換素材卡關：SETUP 8.3 漏 `npm install` → 補跨平台入口 `start.mjs`＋`.command`）
+- **回報**：一名 Mac 使用者照 `docs/SETUP.md` 8.3 換圖，終端機報 module not found，卡在第一步。
+- **根因（乾淨匯出 1:1 重現）**：8.3 的 Mac 括號指引寫 `cd tools && node gui.mjs`，**漏掉第一次要 `npm install`**——Windows 的 `.bat` 內建「沒有 node_modules 就自動安裝」，Mac 手動路徑沒有；而 `node_modules/` 在 .gitignore 內、Download ZIP 也不會有 → ESM 頂層 `import sharp` 直接丟 `Error [ERR_MODULE_NOT_FOUND]: Cannot find package 'sharp'`。
+- 附註：README 與 `docs/ASSETS.md` 本來就寫了 `npm install`，**只有零基礎教學那份漏掉**＝卡到最不會自救的族群。教學文件與參考文件的指令必須逐字對齊，別只改一處。
+- **修法（補入口，不只補字）**：
+  - 新增 `tools/start.mjs`＝跨平台入口：偵測 `node_modules/sharp` 不存在就代跑 `npm install`（ASCII 先行＋中文附後，含 npm 不存在／安裝失敗兩種人話錯誤），再啟動素材牆；`gui.mjs` 的 `main()` 改為 export（原 `process.argv[1]` entry 守衛保留，直接 `node gui.mjs` 行為不變）。
+  - 新增根目錄 **`換素材工具-Mac.command`**（bash shebang＋LF＋執行權限，雙擊即跑），與 `.bat` 對稱；內部走 `node tools/start.mjs`，故 Mac 也享有自動安裝。
+  - `.gitattributes` 加 `*.command text eol=lf`（CRLF 會讓 bash 報 `node\r: command not found`）；`gui.test.mjs` 加兩條不變式：.command（shebang／無 CR／有執行權限／走 start.mjs）、start.mjs（偵測 sharp／npm install／啟動 main）。
+  - 文件：SETUP 8.3 改成雙平台雙擊＋Gatekeeper「右鍵→打開」提示＋「Mac 備用方式」（拖資料夾進終端機後一行 `node tools/start.mjs`）＋`ERR_MODULE_NOT_FOUND` 卡關對照；`docs/ASSETS.md`、README 的 Mac 段同步改寫。
+- **驗證**：乾淨副本（無 node_modules）跑 `node tools/start.mjs` → 自動安裝 → 素材牆 `http://localhost:4646` 回 200；第二次執行跳過安裝直接開；`bash -n` 語法檢查過；本 repo `npm test` 全綠。
+- **未驗**：Mac 真機雙擊 `.command`＋Gatekeeper 流程（手邊無 Mac）——備用方式（終端機一行）為保證路徑，文件已並列。
+- **狀態**：本輪已在兩 repo commit（上游同步同一批），**push 由 Benson 執行**；push 後 GitHub Pages 說明頁／教學才會換上新版 8.3。
+
 ## 2026-07-22（教學補強：更新後連線卡死的故障排除 Q6）
 - SETUP.md 第 7 章新增 **Q6**：「更新上線」bump Service Worker 後，當時開著 App 的裝置可能連線層卡死（症狀＝行程載入失敗／內容空白、重整無效；原 Q5 只講網路，會把中招的人引去查錯方向）。解法＝**完全重啟瀏覽器／裝置即癒**，零資料損失。
 - 來源＝上游 2026-07-22 真實事故：一日兩次更新後，開著 App 的兩台裝置皆中、重啟皆癒；完整調查與排除鏈見上游 DEVLOG。本次僅動 SETUP.md 文字，未同步任何程式碼，內文不涉專案識別字串。
