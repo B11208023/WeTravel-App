@@ -7,10 +7,10 @@
 // 詳細步驟請見 README.md「自行架設教學」
 // ============================================================
 export const firebaseConfig = {
-    apiKey: "YOUR_API_KEY",
-    authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-    projectId: "YOUR_PROJECT_ID",
-    storageBucket: "YOUR_PROJECT_ID.firebasestorage.app",
-    messagingSenderId: "YOUR_SENDER_ID",
-    appId: "YOUR_APP_ID"
+    apiKey: "AIzaSyBlM7nDyx8E61fbvvMZNVfX_6pc08Lzk9k",
+    authDomain: "jeju-trip-12567.firebaseapp.com",
+    projectId: "jeju-trip-12567",
+    storageBucket: "jeju-trip-12567.firebasestorage.app",
+    messagingSenderId: "1093316801126",
+    appId: "1:1093316801126:web:f464598d045e68f4edf3a7"
 };
