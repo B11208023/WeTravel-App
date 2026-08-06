@@ -689,17 +689,13 @@
                                             <div class="font-bold text-stone-800 text-base pr-6">{{ item.activity ||
                                                 '未命名行程' }}</div>
 
-                                            <a v-if="item.link || item.location"
-                                                :href="getExternalMapLink(item.link || item.location)" target="_blank"
+                                           <a v-if="loc.link"
+                                                :href="getExternalMapLink(loc.link)" target="_blank"
                                                 @click.stop
-                                                class="relative z-10 flex items-center justify-between px-3 py-2 rounded-lg text-xs font-bold transition-all border group/btn w-full mt-2"
-                                                :class="isUrl(item.link || item.location) ? 'bg-indigo-50 text-indigo-600 border-indigo-100 hover:bg-indigo-100' : 'bg-primary-50 text-primary-700 border-primary-100 hover:bg-primary-100'">
+                                                class="relative z-10 flex items-center justify-between px-3 py-2 rounded-lg text-xs font-bold transition-all border group/btn w-full mt-2 bg-primary-50 text-primary-700 border-primary-100 hover:bg-primary-100">
                                                 <div class="flex items-center gap-2 truncate pr-2">
-                                                    <i
-                                                        :class="isUrl(item.link || item.location) ? 'ph-bold ph-globe' : 'ph-bold ph-navigation-arrow'"></i>
-                                                    <span class="truncate">{{ isUrl(item.link || item.location)
-                                                        ? '開啟連結' :
-                                                        '開啟導航' }}</span>
+                                                    <i class="ph-bold ph-navigation-arrow"></i>
+                                                    <span class="truncate">開啟導航</span>
                                                 </div>
                                                 <i class="ph-bold ph-arrow-right"></i>
                                             </a>
@@ -754,8 +750,8 @@
                                         </div>
                                         <i class="ph-bold ph-pencil-simple text-stone-300 shrink-0"></i>
                                     </div>
-                                    <a v-if="item.link || item.location"
-                                        :href="getExternalMapLink(item.link || item.location)" target="_blank"
+                                    <a v-if="loc.link"
+                                        :href="getExternalMapLink(loc.link)" target="_blank"
                                         @click.stop
                                         class="relative z-10 flex items-center justify-between px-3 py-2 rounded-lg text-xs font-bold transition-all border group/btn w-full mt-2 bg-primary-50 text-primary-700 border-primary-100 hover:bg-primary-100">
                                         <div class="flex items-center gap-2 truncate pr-2">
