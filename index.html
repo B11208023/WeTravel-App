@@ -367,11 +367,11 @@
                 if (bar) bar.style.width = '100%';
             });
         });
-        // 隱藏啟動畫面：App 掛載完成即散場（app.js onMounted 呼叫 window.__hideSplash），最多保底 1 秒
+        // 隱藏啟動畫面：App 掛載完成即散場（app.js onMounted 呼叫 window.__hideSplash），最多保底 2 秒
         window.__hideSplash = () => {
             const screen = document.getElementById('loading-screen');
             if (screen && !screen.dataset.hidden) {
-                screen.dataset.hidden = '1';
+                screen.dataset.hidden = '2';
                 screen.style.opacity = '0';
                 screen.style.visibility = 'hidden';
                 setTimeout(() => screen.remove(), 400);
@@ -527,7 +527,7 @@
                     <!-- Flight Card -->
                     <div class="relative">
                         <transition name="fade" mode="out-in">
-                            <div v-if="currentDay.flight" key="flight-info"
+                            <div v-if="currentDay.flight && (currentDayIndex === 0 || currentDayIndex === days.length - 1)" key="flight-info"
                                 class="relative bg-gradient-to-br from-primary-50 to-white rounded-[2.5rem] shadow-soft border border-white overflow-hidden group transition-all">
 
                                 <div
