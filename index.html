@@ -528,7 +528,7 @@
                     <div class="relative">
                         <transition name="fade" mode="out-in">
                             <div v-if="currentDay.flight" key="flight-info"
-    class="relative bg-gradient-to-br from-primary-50 to-white rounded-[2.5rem] shadow-soft border border-white overflow-hidden group transition-all">
+                            class="relative bg-gradient-to-br from-primary-50 to-white rounded-[2.5rem] shadow-soft border border-white overflow-hidden group transition-all">
 
                                 <div
                                     class="absolute top-0 right-0 w-32 h-32 bg-primary-100 rounded-full blur-2xl -mr-10 -mt-10 opacity-60 pointer-events-none">
@@ -689,8 +689,8 @@
                                             <div class="font-bold text-stone-800 text-base pr-6">{{ item.activity ||
                                                 '未命名行程' }}</div>
 
-                                           <a v-if="loc.link"
-                                                :href="getExternalMapLink(loc.link)" target="_blank"
+                                           <a v-if="item.link"
+                                                :href="getExternalMapLink(item.link)" target="_blank"
                                                 @click.stop
                                                 class="relative z-10 flex items-center justify-between px-3 py-2 rounded-lg text-xs font-bold transition-all border group/btn w-full mt-2 bg-primary-50 text-primary-700 border-primary-100 hover:bg-primary-100">
                                                 <div class="flex items-center gap-2 truncate pr-2">
@@ -750,8 +750,8 @@
                                         </div>
                                         <i class="ph-bold ph-pencil-simple text-stone-300 shrink-0"></i>
                                     </div>
-                                    <a v-if="loc.link"
-                                        :href="getExternalMapLink(loc.link)" target="_blank"
+                                    <a v-if="item.link"
+                                        :href="getExternalMapLink(item.link)" target="_blank"
                                         @click.stop
                                         class="relative z-10 flex items-center justify-between px-3 py-2 rounded-lg text-xs font-bold transition-all border group/btn w-full mt-2 bg-primary-50 text-primary-700 border-primary-100 hover:bg-primary-100">
                                         <div class="flex items-center gap-2 truncate pr-2">
