@@ -754,10 +754,15 @@
                                         </div>
                                         <i class="ph-bold ph-pencil-simple text-stone-300 shrink-0"></i>
                                     </div>
-                                    <a v-if="loc.link" :href="getExternalMapLink(loc.link)" target="_blank" @click.stop
-                                        class="flex items-center justify-center gap-2 w-full py-2 rounded-lg text-xs font-bold transition-all border bg-primary-50 text-primary-700 border-primary-100 hover:bg-primary-100">
-                                        <i class="ph-bold ph-navigation-arrow"></i>
-                                        <span>開啟導航</span>
+                                    <a v-if="item.link || item.location"
+                                        :href="getExternalMapLink(item.link || item.location)" target="_blank"
+                                        @click.stop
+                                        class="relative z-10 flex items-center justify-between px-3 py-2 rounded-lg text-xs font-bold transition-all border group/btn w-full mt-2 bg-primary-50 text-primary-700 border-primary-100 hover:bg-primary-100">
+                                        <div class="flex items-center gap-2 truncate pr-2">
+                                            <i class="ph-bold ph-navigation-arrow"></i>
+                                            <span class="truncate">開啟導航</span>
+                                        </div>
+                                        <i class="ph-bold ph-arrow-right"></i>
                                     </a>
                                     <div v-if="loc.note" class="text-sm text-stone-600 whitespace-pre-wrap leading-relaxed">
                                         {{ loc.note }}</div>
