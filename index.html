@@ -755,10 +755,9 @@
                                         <i class="ph-bold ph-pencil-simple text-stone-300 shrink-0"></i>
                                     </div>
                                     <a v-if="loc.link" :href="getExternalMapLink(loc.link)" target="_blank" @click.stop
-                                        class="flex items-center justify-center gap-2 w-full py-2 rounded-lg text-xs font-bold transition-all border"
-                                        :class="isUrl(loc.link) ? 'bg-indigo-50 text-indigo-600 border-indigo-100 hover:bg-indigo-100' : 'bg-primary-50 text-primary-700 border-primary-100 hover:bg-primary-100'">
-                                        <i :class="isUrl(loc.link) ? 'ph-bold ph-globe' : 'ph-bold ph-navigation-arrow'"></i>
-                                        <span>{{ isUrl(loc.link) ? '開啟連結' : '開啟導航' }}</span>
+                                        class="flex items-center justify-center gap-2 w-full py-2 rounded-lg text-xs font-bold transition-all border bg-primary-50 text-primary-700 border-primary-100 hover:bg-primary-100">
+                                        <i class="ph-bold ph-navigation-arrow"></i>
+                                        <span>開啟導航</span>
                                     </a>
                                     <div v-if="loc.note" class="text-sm text-stone-600 whitespace-pre-wrap leading-relaxed">
                                         {{ loc.note }}</div>
@@ -1550,6 +1549,10 @@
                         <textarea v-model="locModal.draft.note" rows="2"
                             class="w-full text-sm text-stone-500 bg-stone-50 rounded-xl px-3 py-2.5 border-none focus:ring-2 focus:ring-primary-100 placeholder:text-stone-300 resize-none leading-relaxed"
                             placeholder="備註..."></textarea>
+                        <div class="mt-4">
+                            <label class="block text-xs font-bold text-stone-600 mb-1">上傳照片</label>
+                            <input type="file" @change="handleFileUpload" accept="image/*" class="text-xs text-stone-500">
+                        </div>
 
                         <div class="flex items-center justify-between pt-2 border-t border-stone-50">
                             <button v-if="locModal.mode === 'edit'" @click="deleteLocFromModal"
