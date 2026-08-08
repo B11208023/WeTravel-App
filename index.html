@@ -773,137 +773,171 @@
                     </button>
                 </div>
 
-                <div v-else-if="viewMode === 'money'" key="money"
-                    class="view-pane p-5 pb-32 space-y-6 flex-1 overflow-y-auto hide-scroll">
-                    <div
-                        class="bg-stone-800 text-stone-800 rounded-3xl p-6 shadow-xl shadow-stone-500/20 relative overflow-hidden group">
+            <div v-else-if="viewMode === 'money'" key="money"
+                class="view-pane p-5 pb-32 space-y-6 flex-1 overflow-y-auto hide-scroll">
 
-                        <!-- Background Image -->
-                        <div class="absolute inset-0 z-0">
-                            <img src="assets/kitty_money.png" class="w-full h-full object-cover"
-                                alt="Background Pattern">
-                        </div>
-
-                        <div class="relative z-10 flex justify-between items-start">
-                            <div>
-                                <div class="text-stone-800 text-xs font-bold tracking-widest uppercase mb-1">Total
-                                    Expense
-                                </div>
-                                <div class="text-4xl font-black font-mono tracking-tight">{{ currencySymbol }} {{
-                                    totalExpense.toLocaleString() }}</div>
-                                <div class="text-sm font-medium text-stone-800 mt-2 flex items-center gap-1 bg-white/10 w-fit px-2 py-1 rounded-lg backdrop-blur-sm">
-                                    <i class="ph-bold ph-arrows-left-right"></i> ≈ NT$ {{ Math.round(totalExpense *
-                                    exchangeRate).toLocaleString() }}
-                                </div>
-                            </div>
-                            <div class="text-right">
-                                <label class="text-[10px] text-stone-800 block mb-1">匯率 1{{ currencyLabel }}≈NT$</label>
-                                <input v-model.number="exchangeRate" @change="updateExchangeRate" type="number"
-                                    step="0.001" inputmode="decimal"
-                                    class="w-16 text-right text-sm font-bold text-indigo-900 bg-white/80 focus:bg-white rounded-lg px-2 py-1 shadow-sm outline-none focus:ring-2 focus:ring-white/70">
-                            </div>
-                        </div>
+                <!-- 1. 總計與匯率卡片區塊（已去除重複卡片外框） -->
+                <div class="bg-gradient-to-br from-primary-50 to-white text-stone-800 rounded-3xl p-6 shadow-soft border border-white relative overflow-hidden group">
+                    <!-- 背景圖片 -->
+                    <div class="absolute inset-0 z-0 opacity-15 pointer-events-none">
+                        <img src="assets/kitty_money.png" class="w-full h-full object-cover" alt="Background Pattern">
                     </div>
 
-                    <!-- 記帳成員 + 每人小計 -->
-                    <div class="bg-white p-4 rounded-3xl border border-stone-100 shadow-soft space-y-4">
-                        <!-- 成員（可加/刪） -->
-                        <div>
-                            <div class="text-[10px] text-stone-500 mb-2 pl-1 uppercase tracking-wider font-bold">成員</div>
-                            <div v-if="participants.length" class="flex flex-wrap gap-2 mb-2">
-                                <span v-for="p in participants" :key="p"
-                                    class="inline-flex items-center gap-1.5 bg-stone-100 rounded-full pl-3 pr-1.5 py-1.5 text-sm font-bold text-stone-700">
-                                    {{ p }}
-                                    <button @click="removeParticipant(p)"
-                                        class="w-5 h-5 flex items-center justify-center rounded-full text-stone-400 hover:bg-stone-300 hover:text-white transition">
-                                        <i class="ph-bold ph-x text-xs"></i>
-                                    </button>
-                                </span>
+                    <!-- 卡片主要內容 -->
+                    <div class="relative z-10 space-y-3">
+                        <!-- 上層：保持原本左總計、右匯率結構 -->
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <div class="text-primary-400 text-xs font-bold tracking-widest uppercase mb-1">Total Expense</div>
+                                <div class="text-4xl font-black font-mono tracking-tight text-stone-800">
+                                    {{ currencySymbol }} {{ totalExpense.toLocaleString() }}
+                                </div>
+                                <div class="text-xs font-bold text-stone-500 mt-2 flex items-center gap-1.5 bg-white/70 w-fit px-2.5 py-1 rounded-xl border border-primary-100/50 shadow-sm">
+                                    <i class="ph-bold ph-arrows-left-right text-primary-500"></i>
+                                    <span>≈ NT$ {{ Math.round(totalExpense * exchangeRate).toLocaleString() }}</span>
+                                </div>
                             </div>
-                            <div class="flex gap-2">
-                                <input v-model="newParticipant" @keyup.enter="addParticipant" placeholder="新增成員名字"
-                                    class="flex-1 bg-stone-50 border-none rounded-xl text-sm font-bold text-stone-700 py-2.5 px-3 focus:ring-2 focus:ring-primary-200">
-                                <button @click="addParticipant"
-                                    class="px-4 bg-primary-500 text-white rounded-xl text-sm font-bold shadow-md shadow-primary-500/30 active:scale-95 transition flex items-center gap-1 shrink-0">
-                                    <i class="ph-bold ph-plus"></i> 加人
+
+                            <div class="text-right space-y-2">
+                                <!-- 匯率輸入框 -->
+                                <div>
+                                    <label class="text-[10px] text-stone-500 font-bold block mb-1">匯率 1{{ currencyLabel }}≈NT$</label>
+                                    <input v-model.number="exchangeRate" @change="updateExchangeRate" type="number"
+                                        step="0.0001" inputmode="decimal"
+                                        class="w-16 text-right text-xs font-bold text-primary-600 bg-white border border-primary-100 focus:bg-white rounded-lg px-2 py-1 shadow-sm outline-none focus:ring-2 focus:ring-primary-200">
+                                </div>
+
+                                <!-- 快速換算器開關 -->
+                                <button @click="showCalc = !showCalc" 
+                                    :class="showCalc ? 'bg-primary-500 text-white' : 'bg-white/80 text-primary-500 hover:bg-primary-50'"
+                                    class="text-[10px] font-bold px-2 py-1 rounded-lg border border-primary-100 shadow-sm transition-all flex items-center gap-1 ml-auto">
+                                    <i class="ph-bold ph-calculator"></i>
+                                    <span>{{ showCalc ? '關閉試算' : '試算金額' }}</span>
                                 </button>
                             </div>
                         </div>
 
-                        <!-- 每人各付多少（小計，無正負、無結算） -->
-                        <div v-if="expenses.length" class="grid grid-cols-2 gap-3 border-t border-stone-100 pt-3">
-                            <div v-for="p in participants" :key="p"
-                                class="bg-stone-50 p-3 rounded-2xl border border-stone-100 flex items-center justify-between gap-2">
-                                <span class="text-sm font-bold text-stone-600 truncate">{{ p }}</span>
-                                <span class="text-sm font-black text-primary-600 shrink-0">{{ currencySymbol }}{{
-                                    Math.round(paidByPerson[p] || 0).toLocaleString() }}</span>
+                        <!-- 下層：點擊後展開的隨手換算器 -->
+                        <div v-if="showCalc" class="pt-3 border-t border-primary-100/60 transition-all">
+                            <div class="text-[10px] font-bold text-stone-400 mb-1.5 flex items-center gap-1">
+                                <i class="ph-bold ph-calculator text-primary-400"></i>
+                                <span>隨手試算金額 (不影響記帳總額)</span>
                             </div>
-                        </div>
-                    </div>
-
-                    <div class="bg-white p-4 rounded-3xl border border-stone-100 shadow-sm mb-6">
-                        <div class="mb-3">
-                            <div class="text-[10px] text-stone-500 mb-1 pl-1">項目</div>
-                            <input ref="itemInputRef" v-model="newExpense.item" type="text" placeholder="例如: 午餐、地鐵"
-                                :class="{'ring-2 ring-red-300 bg-red-50': isItemInvalid}"
-                                @input="isItemInvalid = false"
-                                class="w-full bg-stone-50 border-none rounded-xl text-base font-bold text-stone-700 py-3 px-3 focus:ring-2 focus:ring-primary-200">
-                        </div>
-                        <div class="flex items-end gap-2">
-                            <div class="w-24 shrink-0">
-                                <div class="text-[10px] text-stone-500 mb-1 pl-1">誰付錢</div>
-                                <select v-model="newExpense.payer"
-                                    class="w-full bg-stone-50 border-none rounded-xl text-sm font-bold text-stone-700 py-2.5 px-3 focus:ring-2 focus:ring-primary-200 appearance-none">
-                                    <option v-for="p in participants" :value="p">{{ p }}</option>
-                                </select>
-                            </div>
-                            <div class="flex-1">
-                                <div class="text-[10px] text-stone-500 mb-1 pl-1">金額</div>
-                                <input ref="amountInputRef" v-model.number="newExpense.amount" type="number"
-                                    inputmode="decimal" :placeholder="currencySymbol"
-                                    :class="{'ring-2 ring-red-300 bg-red-50': isAmountInvalid}"
-                                    @input="isAmountInvalid = false"
-                                    class="w-full bg-stone-50 border-none rounded-xl text-lg font-black text-stone-700 py-2 px-3 focus:ring-2 focus:ring-primary-200 text-right font-mono tracking-tight">
-                            </div>
-                            <button @click="addExpense"
-                                class="w-12 h-11 bg-primary-500 text-white rounded-xl flex items-center justify-center shadow-lg shadow-primary-500/30 hover:bg-primary-600 active:scale-95 transition shrink-0 mb-[1px]">
-                                <i class="ph-bold ph-plus text-xl"></i>
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="space-y-3">
-                        <div v-for="exp in expenses" :key="exp.id || exp.item"
-                            class="bg-white rounded-2xl border border-stone-100 shadow-sm transition-all overflow-hidden">
-                            <!-- 點一下開彈窗編輯 -->
-                            <div @click="openExpModal(exp)"
-                                class="flex justify-between items-center p-4 cursor-pointer active:bg-stone-50">
-                                <div class="flex items-center gap-3 min-w-0">
-                                    <div
-                                        class="w-10 h-10 rounded-full bg-primary-50 flex items-center justify-center border border-primary-100 overflow-hidden shrink-0">
-                                        <img v-if="exp.payer === '熊'" src="assets/icn_kitty.png"
-                                            style="width:2.5rem;height:2.5rem" class="object-contain" alt="熊">
-                                        <img v-else-if="exp.payer === '班'" src="assets/icn_danial.png"
-                                            style="width:2.5rem;height:2.5rem" class="object-contain" alt="班">
-                                        <span v-else class="text-sm font-black text-primary-600">{{ (exp.payer ||
-                                            '?').charAt(0) }}</span>
-                                    </div>
-                                    <div class="min-w-0">
-                                        <div class="font-bold text-stone-700 truncate">{{ exp.item }}</div>
-                                        <div class="text-xs text-stone-400">{{ exp.payer }}<span v-if="exp.date"> ・ {{
-                                            fmtExpDate(exp.date) }}</span></div>
-                                    </div>
+                            <div class="flex items-center gap-2 bg-white/90 p-2 rounded-2xl border border-primary-100/80 shadow-sm">
+                                <div class="flex-1 relative">
+                                    <input v-model.number="calcAmount" type="number" inputmode="decimal" placeholder="輸入金額 (如 10000)"
+                                        class="w-full text-xs font-bold text-stone-800 bg-stone-50 border border-stone-100 focus:bg-white rounded-xl px-2.5 py-1.5 outline-none font-mono">
+                                    <span class="absolute right-2 top-1.5 text-[10px] font-bold text-stone-400">{{ currencyLabel }}</span>
                                 </div>
-                                <div class="flex items-center gap-2 shrink-0">
-                                    <span class="font-mono font-bold text-stone-800 text-lg">{{ currencySymbol }}{{
-                                        exp.amount.toLocaleString() }}</span>
-                                    <i class="ph-bold ph-pencil-simple text-stone-300"></i>
+                                <i class="ph-bold ph-equals text-stone-300 text-xs"></i>
+                                <div class="px-3 py-1.5 bg-primary-50 border border-primary-100 rounded-xl font-mono font-black text-primary-600 text-xs min-w-[90px] text-right">
+                                    NT$ {{ Math.round((calcAmount || 0) * exchangeRate).toLocaleString() }}
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
+                <!-- 2. 記帳成員 + 每人小計 -->
+                <div class="bg-white p-4 rounded-3xl border border-stone-100 shadow-soft space-y-4">
+                <!-- 成員（可加/刪） -->
+                    <div>
+                        <div class="text-[10px] text-stone-500 mb-2 pl-1 uppercase tracking-wider font-bold">成員</div>
+                        <div v-if="participants.length" class="flex flex-wrap gap-2 mb-2">
+                            <span v-for="p in participants" :key="p"
+                                class="inline-flex items-center gap-1.5 bg-stone-100 rounded-full pl-3 pr-1.5 py-1.5 text-sm font-bold text-stone-700">
+                                {{ p }}
+                                <button @click="removeParticipant(p)"
+                                    class="w-5 h-5 flex items-center justify-center rounded-full text-stone-400 hover:bg-stone-300 hover:text-white transition">
+                                    <i class="ph-bold ph-x text-xs"></i>
+                                </button>
+                            </span>
+                        </div>
+                        <div class="flex gap-2">
+                            <input v-model="newParticipant" @keyup.enter="addParticipant" placeholder="新增成員名字"
+                                class="flex-1 bg-stone-50 border-none rounded-xl text-sm font-bold text-stone-700 py-2.5 px-3 focus:ring-2 focus:ring-primary-200">
+                            <button @click="addParticipant"
+                                class="px-4 bg-primary-500 text-white rounded-xl text-sm font-bold shadow-md shadow-primary-500/30 active:scale-95 transition flex items-center gap-1 shrink-0">
+                                <i class="ph-bold ph-plus"></i> 加人
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 每人各付多少（小計） -->
+                    <div v-if="expenses.length" class="grid grid-cols-2 gap-3 border-t border-stone-100 pt-3">
+                        <div v-for="p in participants" :key="p"
+                            class="bg-stone-50 p-3 rounded-2xl border border-stone-100 flex items-center justify-between gap-2">
+                                <span class="text-sm font-bold text-stone-600 truncate">{{ p }}</span>
+                                <span class="text-sm font-black text-primary-600 shrink-0">{{ currencySymbol }}{{
+                                    Math.round(paidByPerson[p] || 0).toLocaleString() }}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. 新增消費項目表單 -->
+                <div class="bg-white p-4 rounded-3xl border border-stone-100 shadow-sm mb-6">
+                    <div class="mb-3">
+                        <div class="text-[10px] text-stone-500 mb-1 pl-1">項目</div>
+                        <input ref="itemInputRef" v-model="newExpense.item" type="text" placeholder="例如: 午餐、地鐵"
+                            :class="{'ring-2 ring-red-300 bg-red-50': isItemInvalid}"
+                            @input="isItemInvalid = false"
+                            class="w-full bg-stone-50 border-none rounded-xl text-base font-bold text-stone-700 py-3 px-3 focus:ring-2 focus:ring-primary-200">
+                    </div>
+                    <div class="flex items-end gap-2">
+                        <div class="w-24 shrink-0">
+                            <div class="text-[10px] text-stone-500 mb-1 pl-1">誰付錢</div>
+                            <select v-model="newExpense.payer"
+                                class="w-full bg-stone-50 border-none rounded-xl text-sm font-bold text-stone-700 py-2.5 px-3 focus:ring-2 focus:ring-primary-200 appearance-none">
+                                <option v-for="p in participants" :value="p">{{ p }}</option>
+                            </select>
+                        </div>
+                        <div class="flex-1">
+                            <div class="text-[10px] text-stone-500 mb-1 pl-1">金額</div>
+                            <input ref="amountInputRef" v-model.number="newExpense.amount" type="number"
+                                inputmode="decimal" :placeholder="currencySymbol"
+                                :class="{'ring-2 ring-red-300 bg-red-50': isAmountInvalid}"
+                                @input="isAmountInvalid = false"
+                                class="w-full bg-stone-50 border-none rounded-xl text-lg font-black text-stone-700 py-2 px-3 focus:ring-2 focus:ring-primary-200 text-right font-mono tracking-tight">
+                        </div>
+                        <button @click="addExpense"
+                            class="w-12 h-11 bg-primary-500 text-white rounded-xl flex items-center justify-center shadow-lg shadow-primary-500/30 hover:bg-primary-600 active:scale-95 transition shrink-0 mb-[1px]">
+                            <i class="ph-bold ph-plus text-xl"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 4. 消費明細列表 -->
+                <div class="space-y-3">
+                    <div v-for="exp in expenses" :key="exp.id || exp.item"
+                        class="bg-white rounded-2xl border border-stone-100 shadow-sm transition-all overflow-hidden">
+                        <!-- 點擊編輯 -->
+                        <div @click="openExpModal(exp)"
+                            class="flex justify-between items-center p-4 cursor-pointer active:bg-stone-50">
+                            <div class="flex items-center gap-3 min-w-0">
+                                <div
+                                    class="w-10 h-10 rounded-full bg-primary-50 flex items-center justify-center border border-primary-100 overflow-hidden shrink-0">
+                                    <img v-if="exp.payer === '熊'" src="assets/icn_kitty.png"
+                                        style="width:2.5rem;height:2.5rem" class="object-contain" alt="熊">
+                                    <img v-else-if="exp.payer === '班'" src="assets/icn_danial.png"
+                                        style="width:2.5rem;height:2.5rem" class="object-contain" alt="班">
+                                    <span v-else class="text-sm font-black text-primary-600">{{ (exp.payer ||
+                                        '?').charAt(0) }}</span>
+                                </div>
+                                <div class="min-w-0">
+                                    <div class="font-bold text-stone-700 truncate">{{ exp.item }}</div>
+                                    <div class="text-xs text-stone-400">{{ exp.payer }}<span v-if="exp.date"> ・ {{
+                                        fmtExpDate(exp.date) }}</span></div>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-2 shrink-0">
+                                <span class="font-mono font-bold text-stone-800 text-lg">{{ currencySymbol }}{{
+                                    exp.amount.toLocaleString() }}</span>
+                                <i class="ph-bold ph-pencil-simple text-stone-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
                 <div v-else-if="viewMode === 'checklist'" key="checklist"
                     class="view-pane p-5 pb-32 space-y-6 flex-1 overflow-y-auto hide-scroll">
                     <div class="mb-4 flex items-end justify-between gap-3">
