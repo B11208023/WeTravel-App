@@ -33,7 +33,7 @@ createApp({
         const showJoinInput = ref(false);
         const joinTripUrl = ref('');
         const showCalc = ref(false);
-        const calcAmount = ref(null);
+        const calcAmount = ref(' ');
 
         const errorMap = {
             'unavailable': '無法連線到伺服器，請檢查網路。',
