@@ -706,10 +706,14 @@
                                                     {{ item.note }}</div>
                                             </div>
 
-                                            <img v-if="item.photo" 
-                                                :src="item.photo" 
-                                                @click.stop="previewImage(item.photo)"
-                                                class="w-full h-36 object-cover rounded-xl mt-2 border border-stone-100 shadow-sm cursor-pointer hover:opacity-90 transition">
+                                            <div v-if="item.photo" class="flex gap-2 mt-2 overflow-x-auto hide-scroll pt-1">
+                                                <img v-for="(imgUrl, pIdx) in item.photo.split(',')" 
+                                                    :key="pIdx"
+                                                    :src="imgUrl.trim()" 
+                                                    @click.stop="previewImage(imgUrl.trim())"
+                                                    @error="$event.target.style.display='none'"
+                                                    class="w-24 h-24 object-cover rounded-xl border border-stone-100 shadow-sm cursor-pointer shrink-0 hover:opacity-90 transition">
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
