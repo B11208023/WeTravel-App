@@ -33,7 +33,7 @@ createApp({
         const showJoinInput = ref(false);
         const joinTripUrl = ref('');
         const showCalc = ref(false);
-        const calcAmount = ref(' ');
+        const calcAmount = ref('');
         const previewImageUrl = ref(null);
         const previewImage = (url) => {
               previewImageUrl.value = url;
