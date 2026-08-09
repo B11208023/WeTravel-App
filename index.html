@@ -790,12 +790,12 @@
                         <!-- 上層：保持原本左總計、右匯率結構 -->
                         <div class="flex justify-between items-start">
                             <div>
-                                <div class="text-primary-400 text-xs font-bold tracking-widest uppercase mb-1">Total Expense</div>
+                                <div class="text-blue-900 text-xs font-bold tracking-widest uppercase mb-1">Total Expense</div>
                                 <div class="text-4xl font-black font-mono tracking-tight text-stone-800">
                                     {{ currencySymbol }} {{ totalExpense.toLocaleString() }}
                                 </div>
-                                <div class="text-xs font-bold text-stone-500 mt-2 flex items-center gap-1.5 bg-white/70 w-fit px-2.5 py-1 rounded-xl border border-primary-100/50 shadow-sm">
-                                    <i class="ph-bold ph-arrows-left-right text-primary-500"></i>
+                                <div class="text-xs font-bold text-blue-900 mt-2 flex items-center gap-1.5 bg-white/70 w-fit px-2.5 py-1 rounded-xl border border-primary-100/50 shadow-sm">
+                                    <i class="ph-bold ph-arrows-left-right text-blue-900"></i>
                                     <span>≈ NT$ {{ Math.round(totalExpense * exchangeRate).toLocaleString() }}</span>
                                 </div>
                             </div>
