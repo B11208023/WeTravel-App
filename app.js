@@ -34,6 +34,10 @@ createApp({
         const joinTripUrl = ref('');
         const showCalc = ref(false);
         const calcAmount = ref(' ');
+        const previewImageUrl = ref(null);
+        const previewImage = (url) => {
+              previewImageUrl.value = url;
+
 
         const errorMap = {
             'unavailable': '無法連線到伺服器，請檢查網路。',
@@ -916,7 +920,7 @@ createApp({
             activeChecklistMember,
             checklistProgress, checklistByCategory, seedDefaultChecklist, resetChecklist,
             checkModal, openCheckModal, saveCheckModal, deleteCheckFromModal, isCheckNameInvalid,
-            CHECKLIST_CATEGORIES, LUGGAGE_META, showCalc, calcAmount,
+            CHECKLIST_CATEGORIES, LUGGAGE_META, showCalc, calcAmount, previewImageUrl, previewImage
 
         };
     }
