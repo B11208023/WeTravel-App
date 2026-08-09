@@ -705,6 +705,10 @@
                                                 <div class="flex-1 text-sm text-stone-600 leading-relaxed whitespace-pre-wrap">
                                                     {{ item.note }}</div>
                                             </div>
+
+                                            <img v-if="item.photo" 
+                                            :src="item.photo" 
+                                            class="w-full h-36 object-cover rounded-xl mt-2 border border-stone-100 shadow-sm">
                                         </div>
                                     </div>
                                 </div>
@@ -1511,6 +1515,13 @@
                                 class="w-full bg-stone-50 rounded-xl py-2 pl-9 pr-3 text-sm text-stone-600 focus:outline-none focus:ring-2 focus:ring-primary-100 resize-none min-h-[60px]"
                                 placeholder="備註 (票卷/訂位編號...)"></textarea>
                         </div>
+
+                        <div class="relative mt-2">
+                            <i class="ph-bold ph-image absolute top-2.5 left-3 text-stone-300"></i>
+                            <input v-model="itemModal.draft.photo"
+                                class="w-full bg-stone-50 rounded-xl py-2 pl-9 pr-3 text-xs text-stone-600 focus:outline-none focus:ring-2 focus:ring-primary-100"
+                                placeholder="圖片路徑 (例如: images/day1_ramen.jpg)">
+                            </div>
 
                         <div class="flex items-center justify-between pt-2 border-t border-stone-50">
                             <button v-if="itemModal.mode === 'edit'" @click="deleteItemFromModal"
