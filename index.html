@@ -707,7 +707,7 @@
                                             </div>
 
                                             <div v-if="item.photo" class="flex gap-2 mt-2 overflow-x-auto hide-scroll pt-1 relative z-20">
-                                                <img v-for="(imgUrl, pIdx) in item.photo.split(',')
+                                                <img v-for="(imgUrl, pIdx) in item.photo.split(',')"
                                                     :key="pIdx"
                                                     :src="imgUrl.trim()" 
                                                     @click.stop.prevent="previewImage(imgUrl.trim())"
