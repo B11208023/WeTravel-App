@@ -37,6 +37,7 @@ createApp({
         const previewImageUrl = ref(null);
         const previewImage = (url) => {
               previewImageUrl.value = url;
+        };
 
 
         const errorMap = {
