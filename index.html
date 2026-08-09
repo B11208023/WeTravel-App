@@ -706,13 +706,13 @@
                                                     {{ item.note }}</div>
                                             </div>
 
-                                            <div v-if="item.photo" class="flex gap-2 mt-2 overflow-x-auto hide-scroll pt-1">
-                                                <img v-for="(imgUrl, pIdx) in item.photo.split(',')" 
+                                            <div v-if="item.photo" class="flex gap-2 mt-2 overflow-x-auto hide-scroll pt-1 relative z-20">
+                                                <img v-for="(imgUrl, pIdx) in item.photo.split(',')
                                                     :key="pIdx"
                                                     :src="imgUrl.trim()" 
-                                                    @click.stop="previewImage(imgUrl.trim())"
+                                                    @click.stop.prevent="previewImage(imgUrl.trim())"
                                                     @error="$event.target.style.display='none'"
-                                                    class="w-24 h-24 object-cover rounded-xl border border-stone-100 shadow-sm cursor-pointer shrink-0 hover:opacity-90 transition">
+                                                    class="w-24 h-24 object-cover rounded-xl border border-stone-100 shadow-sm cursor-pointer shrink-0 hover:opacity-90 transition pointer-events-auto">
                                             </div>
                                         </div>
                                     </div>
@@ -1755,19 +1755,11 @@
         </div>
         <transition name="fade">
             <div v-if="previewImageUrl" 
-                class="fixed inset-0 z-[100] bg-black/85 backdrop-blur-sm flex flex-col items-center justify-center p-4 cursor-pointer"
-                @click="previewImageUrl = null">
-                <!-- 點擊背景或右上角 X 可關閉 -->
-                <div class="relative max-w-full max-h-[85vh] flex items-center justify-center">
-                    <img :src="previewImageUrl" class="max-w-full max-h-[85vh] object-contain rounded-2xl shadow-2xl">
-                    <button @click.stop="previewImageUrl = null" 
-                        class="absolute -top-12 right-0 text-white bg-white/20 hover:bg-white/40 rounded-full w-9 h-9 flex items-center justify-center transition">
-                        <i class="ph-bold ph-x text-lg"></i>
-                    </button>
-                </div>
-            <p class="text-white/60 text-xs font-bold mt-4">點擊任意處關閉</p>
+                @click="previewImageUrl = null" 
+                class="fixed inset-0 bg-black/80 z-[100] flex items-center justify-center p-4 cursor-pointer">
+                <img :src="previewImageUrl" class="max-w-full max-h-full object-contain rounded-lg shadow-2xl">
             </div>
-    </transition>
+        </transition>
     </div><!-- /app -->
 
     <script>
