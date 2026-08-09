@@ -707,8 +707,9 @@
                                             </div>
 
                                             <img v-if="item.photo" 
-                                            :src="item.photo" 
-                                            class="w-full h-36 object-cover rounded-xl mt-2 border border-stone-100 shadow-sm">
+                                                :src="item.photo" 
+                                                @click.stop="previewImage(item.photo)"
+                                                class="w-full h-36 object-cover rounded-xl mt-2 border border-stone-100 shadow-sm cursor-pointer hover:opacity-90 transition">
                                         </div>
                                     </div>
                                 </div>
@@ -1748,7 +1749,21 @@
                 </div>
             </transition>
         </div>
-
+        <transition name="fade">
+            <div v-if="previewImageUrl" 
+                class="fixed inset-0 z-[100] bg-black/85 backdrop-blur-sm flex flex-col items-center justify-center p-4 cursor-pointer"
+                @click="previewImageUrl = null">
+                <!-- 點擊背景或右上角 X 可關閉 -->
+                <div class="relative max-w-full max-h-[85vh] flex items-center justify-center">
+                    <img :src="previewImageUrl" class="max-w-full max-h-[85vh] object-contain rounded-2xl shadow-2xl">
+                    <button @click.stop="previewImageUrl = null" 
+                        class="absolute -top-12 right-0 text-white bg-white/20 hover:bg-white/40 rounded-full w-9 h-9 flex items-center justify-center transition">
+                        <i class="ph-bold ph-x text-lg"></i>
+                    </button>
+                </div>
+            <p class="text-white/60 text-xs font-bold mt-4">點擊任意處關閉</p>
+            </div>
+    </transition>
     </div><!-- /app -->
 
     <script>
