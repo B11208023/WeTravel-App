@@ -939,7 +939,7 @@ createApp({
             activeChecklistMember,
             checklistProgress, checklistByCategory, seedDefaultChecklist, resetChecklist,
             checkModal, openCheckModal, saveCheckModal, deleteCheckFromModal, isCheckNameInvalid,
-            CHECKLIST_CATEGORIES, LUGGAGE_META, showCalc, calcAmount, previewImages, previewIndex, openPreview, closePreview, prevPreviewImage, nextPreviewImage
+            CHECKLIST_CATEGORIES, LUGGAGE_META, showCalc, calcAmount, previewImages, previewIndex, openPreview, closePreview, prevImage, nextImage
         };
     }
 }).mount('#app')
