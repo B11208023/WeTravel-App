@@ -1767,17 +1767,19 @@
                     </button>
 
                     <!-- 上一張按鈕 -->
-                    <button v-if="previewImages.length > 1" @click.stop="prevPreviewImage"
-                        class="absolute left-4 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-white/20 text-white flex items-center justify-center hover:bg-white/40 active:scale-95 transition z-[100000] border border-white/30 backdrop-blur-md cursor-pointer">
+                    <button @click="prevImage"
+                        aria-label="上一張"
+                        class="absolute left-4 top-1/2 -translate-y-1/2 w-11 h-11 text-gray-700 flex items-center justify-center hover:opacity-70 active:scale-95 transition z-[100000] cursor-pointer">
                         <i class="ph-bold ph-caret-left text-2xl"></i>
                     </button>
 
                     <!-- 下一張按鈕 -->
-                    <button v-if="previewImages.length > 1" @click.stop="nextPreviewImage"
-                        class="absolute right-4 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-white/20 text-white flex items-center justify-center hover:bg-white/40 active:scale-95 transition z-[100000] border border-white/30 backdrop-blur-md cursor-pointer">
+                    <button @click="nextImage"
+                        aria-label="下一張"
+                        class="absolute right-4 top-1/2 -translate-y-1/2 w-11 h-11 text-gray-700 flex items-center justify-center hover:opacity-70 active:scale-95 transition z-[100000] cursor-pointer">
                         <i class="ph-bold ph-caret-right text-2xl"></i>
                     </button>
-
+                    
                     <!-- 圖片顯示區（支援原生雙指縮放，無左右滑動切換） -->
                     <div class="relative w-full h-full flex items-center justify-center overflow-auto">
                         <img :src="previewImages[previewIndex]" 
