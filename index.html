@@ -1762,31 +1762,29 @@
                     <!-- 關閉按鈕 -->
                     <button @click="closePreview" 
                         aria-label="關閉預覽"
-                    class="absolute top-6 right-6 w-12 h-12 rounded-full bg-white/20 text-white flex items-center justify-center hover:bg-white/40 active:scale-95 transition z-[100000] border border-white/30 backdrop-blur-md shadow-lg cursor-pointer">
-                    <i class="ph-bold ph-x text-2xl"></i>
+                        class="absolute top-6 right-6 w-12 h-12 rounded-full bg-white/20 text-white flex items-center justify-center hover:bg-white/40 active:scale-95 transition z-[100000] border border-white/30 backdrop-blur-md shadow-lg cursor-pointer">
+                        <i class="ph-bold ph-x text-2xl"></i>
                     </button>
 
                     <!-- 上一張按鈕 -->
                     <button v-if="previewImages.length > 1" @click.stop="prevPreviewImage"
-                        class="absolute left-4 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-white/20 text-white flex items-center justify-center hover:bg-white/40 active:scale-95 transition z-[100000] border border-white/30 backdrop-blur-md">
+                        class="absolute left-4 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-white/20 text-white flex items-center justify-center hover:bg-white/40 active:scale-95 transition z-[100000] border border-white/30 backdrop-blur-md cursor-pointer">
                         <i class="ph-bold ph-caret-left text-2xl"></i>
                     </button>
 
                     <!-- 下一張按鈕 -->
                     <button v-if="previewImages.length > 1" @click.stop="nextPreviewImage"
-                        class="absolute right-4 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-white/20 text-white flex items-center justify-center hover:bg-white/40 active:scale-95 transition z-[100000] border border-white/30 backdrop-blur-md">
+                        class="absolute right-4 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-white/20 text-white flex items-center justify-center hover:bg-white/40 active:scale-95 transition z-[100000] border border-white/30 backdrop-blur-md cursor-pointer">
                         <i class="ph-bold ph-caret-right text-2xl"></i>
                     </button>
 
-                    <!-- 圖片顯示區（支援左右滑動與原生雙指縮放） -->
-                    <div class="relative w-full h-full flex items-center justify-center overflow-auto"
-                         @touchstart="handleTouchStart" 
-                         @touchend="handleTouchEnd">
+                    <!-- 圖片顯示區（支援原生雙指縮放，無左右滑動切換） -->
+                    <div class="relative w-full h-full flex items-center justify-center overflow-auto">
                         <img :src="previewImages[previewIndex]" 
                             class="max-w-full max-h-[85vh] object-contain rounded-2xl shadow-2xl transition-all duration-200">
                     </div>
 
-                    <!-- 頁碼顯示 (例如 1 / 3) -->
+                    <!-- 頁碼指示 (例：1 / 3) -->
                     <div v-if="previewImages.length > 1" class="absolute bottom-6 text-white/90 font-bold text-sm bg-black/50 px-4 py-1.5 rounded-full border border-white/20 backdrop-blur-sm">
                         {{ previewIndex + 1 }} / {{ previewImages.length }}
                     </div>
