@@ -1751,24 +1751,26 @@
                 </div>
             </transition>
         </div>
-        <!-- 圖片預覽 Modal (升級 z-[99999] 與獨立 fixed 層級) -->
-        <transition name="fade">
-            <div v-if="previewImageUrl" 
-                class="fixed inset-0 z-[99999] bg-black/90 backdrop-blur-md flex items-center justify-center p-4 select-none">
-        
+        <!-- 使用 teleport 將放大燈箱直接傳送到 body，解決 PWA 模式下的容器裁切與觸控問題 -->
+        <teleport to="body">
+            <transition name="fade">
+                <div v-if="previewImageUrl" 
+                    class="fixed inset-0 z-[99999] bg-black/90 backdrop-blur-md flex items-center justify-center p-4 select-none touch-none">
+            
             <!-- 右上角關閉叉叉按鈕 -->
             <button @click.stop="previewImageUrl = null" 
                 aria-label="關閉預覽"
-                class="absolute top-6 right-6 w-11 h-11 rounded-full bg-white/20 text-white flex items-center justify-center hover:bg-white/40 active:scale-95 transition z-[100000] border border-white/30 backdrop-blur-md shadow-lg">
+                class="absolute top-6 right-6 w-12 h-12 rounded-full bg-white/20 text-white flex items-center justify-center hover:bg-white/40 active:scale-95 transition z-[100000] border border-white/30 backdrop-blur-md shadow-lg">
                 <i class="ph-bold ph-x text-2xl"></i>
             </button>
 
-            <!-- 預覽圖片 (點擊圖片也可關閉) -->
+            <!-- 預覽圖片 (點圖片也可關閉) -->
             <img :src="previewImageUrl" 
                 @click.stop="previewImageUrl = null" 
                 class="max-w-full max-h-[85vh] object-contain rounded-2xl shadow-2xl cursor-pointer">
-            </div>
-        </transition>
+                </div>
+            </transition>
+    </teleport>
     </div><!-- /app -->
 
     <script>
@@ -1855,7 +1857,7 @@
         })();
     </script>
 
-    <script type="module" src="./app.js?v=38"></script>
+    <script type="module" src="./app.js?v=39"></script>
 
     <script>
         setTimeout(() => {
