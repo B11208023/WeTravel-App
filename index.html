@@ -706,7 +706,7 @@
                                                     {{ item.note }}</div>
                                             </div>
 
-                                            <img v-for="(imgUrl, pIdx) in item.photo.split(',')"
+                                            <img v-for="(imgUrl, pIdx) in (item.photo?.split(',') || [])"
                                                 :key="pIdx"
                                                 :src="imgUrl.trim()" 
                                                 @click.stop="previewImage(imgUrl.trim())"
