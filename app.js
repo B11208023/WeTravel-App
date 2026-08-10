@@ -37,8 +37,7 @@ createApp({
         const previewImageUrl = ref(null);
         const previewImages = ref([]);
         const previewIndex = ref(0);
-        const touchStartX = ref(0);
-
+        
         const openPreview = (images, index = 0) => {
             previewImages.value = Array.isArray(images) ? images : [images];
             previewIndex.value = index;
