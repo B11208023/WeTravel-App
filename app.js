@@ -48,20 +48,14 @@ createApp({
             previewIndex.value = 0;
         };
 
-        const prevPreviewImage = () => {
-            if (previewIndex.value > 0) {
-                previewIndex.value--;
-            } else {
-                previewIndex.value = previewImages.value.length - 1; // 循環回最後一張
-            }
+        const prevImage = () => {
+          if (!previewImages.value || previewImages.value.length <= 1) return;
+          previewIndex.value = (previewIndex.value - 1 + previewImages.value.length) % previewImages.value.length;
         };
 
-        const nextPreviewImage = () => {
-            if (previewIndex.value < previewImages.value.length - 1) {
-                previewIndex.value++;
-            } else {
-                previewIndex.value = 0; // 循環回第一張
-            }
+        const nextImage = () => {
+          if (!previewImages.value || previewImages.value.length <= 1) return;
+          previewIndex.value = (previewIndex.value + 1) % previewImages.value.length;
         };
 
         const errorMap = {
