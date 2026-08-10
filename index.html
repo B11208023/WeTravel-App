@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
-        content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+        content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover">
     <title>Jeju trip | 雲端直連版</title>
     <link rel="icon" href="./icon-192.png">
     <!-- Tailwind CSS（self-host，供應鏈收編 2026-07-21）-->
@@ -269,7 +269,7 @@
 
         /* 拖曳把手：touch-action 只擋捲動，iOS 長押選字/callout 要另外禁，否則 touchcancel 會砍掉拖曳 */
         .loc-drag-handle {
-            touch-action: none;
+            touch-action: pan-x pan-y;
             -webkit-user-select: none;
             user-select: none;
             -webkit-touch-callout: none;
@@ -706,12 +706,14 @@
                                                     {{ item.note }}</div>
                                             </div>
 
-                                            <img v-for="(imgUrl, pIdx) in (item.photo?.split(',') || [])"
-                                                :key="pIdx"
-                                                :src="imgUrl.trim()" 
-                                                @click.stop="previewImage(imgUrl.trim())"
-                                                @error="$event.target.style.display='none'"
-                                                class="w-24 h-24 object-cover rounded-xl border border-stone-100 shadow-sm cursor-pointer shrink-0 hover:opacity-90 transition pointer-events-auto">
+                                            <div v-if="item.photo" class="flex flex-row gap-2 overflow-x-auto hide-scroll mt-2 pt-1 pb-1 w-full">
+                                                <img v-for="(imgUrl, pIdx) in (item.photo.split(',') || [])"
+                                                    :key="pIdx"
+                                                    :src="imgUrl.trim()" 
+                                                    @click.stop="previewImage(imgUrl.trim())"
+                                                    @error="$event.target.style.display='none'"
+                                                    class="w-24 h-24 object-cover rounded-xl border border-stone-100 shadow-sm cursor-pointer shrink-0 hover:opacity-90 transition pointer-events-auto">
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -1763,12 +1765,7 @@
                 class="absolute top-6 right-6 w-12 h-12 rounded-full bg-white/20 text-white flex items-center justify-center hover:bg-white/40 active:scale-95 transition z-[100000] border border-white/30 backdrop-blur-md shadow-lg">
                 <i class="ph-bold ph-x text-2xl"></i>
             </button>
-
-            <!-- 預覽圖片 (點圖片也可關閉) -->
-            <img :src="previewImageUrl" 
-                @click.stop="previewImageUrl = null" 
-                class="max-w-full max-h-[85vh] object-contain rounded-2xl shadow-2xl cursor-pointer">
-                </div>
+                    
             </transition>
     </teleport>
     </div><!-- /app -->
