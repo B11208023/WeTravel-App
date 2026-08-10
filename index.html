@@ -706,14 +706,12 @@
                                                     {{ item.note }}</div>
                                             </div>
 
-                                            <div v-if="item.photo" class="flex gap-2 mt-2 overflow-x-auto hide-scroll pt-1 relative z-20">
-                                                <img v-for="(imgUrl, pIdx) in item.photo.split(',')"
-                                                    :key="pIdx"
-                                                    :src="imgUrl.trim()" 
-                                                    @click.stop="previewImage(imgUrl.trim())"
-                                                    @error="$event.target.style.display='none'"
-                                                    class="w-24 h-24 object-cover rounded-xl border border-stone-100 shadow-sm cursor-pointer shrink-0 hover:opacity-90 transition pointer-events-auto">
-                                            </div>
+                                            <img v-for="(imgUrl, pIdx) in item.photo.split(',')"
+                                                :key="pIdx"
+                                                :src="imgUrl.trim()" 
+                                                @click.stop="previewImage(imgUrl.trim())"
+                                                @error="$event.target.style.display='none'"
+                                                class="w-24 h-24 object-cover rounded-xl border border-stone-100 shadow-sm cursor-pointer shrink-0 hover:opacity-90 transition pointer-events-auto">
                                         </div>
                                     </div>
                                 </div>
@@ -1753,25 +1751,24 @@
                 </div>
             </transition>
         </div>
-        <!-- 圖片預覽 Modal (含叉叉按鈕) -->
-        <transition name="fade">    
+        <!-- 圖片預覽 Modal (升級 z-[99999] 與獨立 fixed 層級) -->
+        <transition name="fade">
             <div v-if="previewImageUrl" 
-                class="fixed inset-0 bg-black/90 z-[9999] flex items-center justify-center p-4 backdrop-blur-sm select-none">
+                class="fixed inset-0 z-[99999] bg-black/90 backdrop-blur-md flex items-center justify-center p-4 select-none">
         
-                <!-- 右上角叉叉按鈕 (點擊此處關閉) -->
-                <button @click="previewImageUrl = null" 
-                    aria-label="關閉預覽"
-                    class="absolute top-6 right-6 w-11 h-11 rounded-full bg-white/20 text-white flex items-center justify-center hover:bg-white/40 active:scale-95 transition z-[10000] border border-white/30 backdrop-blur-md shadow-lg">
-                    <i class="ph-bold ph-x text-2xl"></i>
-                </button>
+            <!-- 右上角關閉叉叉按鈕 -->
+            <button @click.stop="previewImageUrl = null" 
+                aria-label="關閉預覽"
+                class="absolute top-6 right-6 w-11 h-11 rounded-full bg-white/20 text-white flex items-center justify-center hover:bg-white/40 active:scale-95 transition z-[100000] border border-white/30 backdrop-blur-md shadow-lg">
+                <i class="ph-bold ph-x text-2xl"></i>
+            </button>
 
-                <!-- 圖片本體 (點擊圖片也可以關閉，或是拿掉 @click 只能靠叉叉關閉) -->
-                <img :src="previewImageUrl" 
-                    @click="previewImageUrl = null" 
-                    class="max-w-full max-h-[85vh] object-contain rounded-2xl shadow-2xl cursor-pointer transform transition-transform">
+            <!-- 預覽圖片 (點擊圖片也可關閉) -->
+            <img :src="previewImageUrl" 
+                @click.stop="previewImageUrl = null" 
+                class="max-w-full max-h-[85vh] object-contain rounded-2xl shadow-2xl cursor-pointer">
             </div>
         </transition>
-
     </div><!-- /app -->
 
     <script>
