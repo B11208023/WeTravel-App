@@ -36,6 +36,7 @@ createApp({
         const calcAmount = ref('');
         const previewImageUrl = ref(null);
         const previewImage = (url) => {
+            if (!url) return;
               previewImageUrl.value = url;
         };
 
