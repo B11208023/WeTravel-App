@@ -35,10 +35,54 @@ createApp({
         const showCalc = ref(false);
         const calcAmount = ref('');
         const previewImageUrl = ref(null);
-        const previewImage = (url) => {
-            if (!url) return;
-              previewImageUrl.value = url;
+        const previewImages = ref([]);
+        const previewIndex = ref(0);
+        const touchStartX = ref(0);
+
+        const openPreview = (images, index = 0) => {
+            previewImages.value = Array.isArray(images) ? images : [images];
+            previewIndex.value = index;
         };
+
+        const closePreview = () => {
+            previewImages.value = [];
+            previewIndex.value = 0;
+        };
+
+        const prevPreviewImage = () => {
+            if (previewIndex.value > 0) {
+                previewIndex.value--;
+            } else {
+                previewIndex.value = previewImages.value.length - 1; // 循環回最後一張
+            }
+        };
+
+        const nextPreviewImage = () => {
+            if (previewIndex.value < previewImages.value.length - 1) {
+                previewIndex.value++;
+            } else {
+                previewIndex.value = 0; // 循環回第一張
+            }
+        };
+
+        const handleTouchStart = (e) => {
+            if (e.touches && e.touches.length === 1) {
+                touchStartX.value = e.touches[0].clientX;
+            }
+        };
+
+        const handleTouchEnd = (e) => {
+            if (e.changedTouches && e.changedTouches.length === 1) {
+                const touchEndX = e.changedTouches[0].clientX;
+                const diffX = touchEndX - touchStartX.value;
+                if (diffX > 50) {
+                    prevPreviewImage();
+                } else if (diffX < -50) {
+                    nextPreviewImage();
+                }
+            }
+        };
+
 
 
         const errorMap = {
@@ -922,7 +966,7 @@ createApp({
             activeChecklistMember,
             checklistProgress, checklistByCategory, seedDefaultChecklist, resetChecklist,
             checkModal, openCheckModal, saveCheckModal, deleteCheckFromModal, isCheckNameInvalid,
-            CHECKLIST_CATEGORIES, LUGGAGE_META, showCalc, calcAmount, previewImageUrl, previewImage
+            CHECKLIST_CATEGORIES, LUGGAGE_META, showCalc, calcAmount, previewImages, previewIndex, openPreview, closePreview, prevPreviewImage, nextPreviewImage, handleTouchStart, handleTouchEnd
 
         };
     }
