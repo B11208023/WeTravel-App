@@ -65,26 +65,6 @@ createApp({
             }
         };
 
-        const handleTouchStart = (e) => {
-            if (e.touches && e.touches.length === 1) {
-                touchStartX.value = e.touches[0].clientX;
-            }
-        };
-
-        const handleTouchEnd = (e) => {
-            if (e.changedTouches && e.changedTouches.length === 1) {
-                const touchEndX = e.changedTouches[0].clientX;
-                const diffX = touchEndX - touchStartX.value;
-                if (diffX > 50) {
-                    prevPreviewImage();
-                } else if (diffX < -50) {
-                    nextPreviewImage();
-                }
-            }
-        };
-
-
-
         const errorMap = {
             'unavailable': '無法連線到伺服器，請檢查網路。',
             'permission-denied': '存取被拒絕，請確認您有權限。',
@@ -966,8 +946,7 @@ createApp({
             activeChecklistMember,
             checklistProgress, checklistByCategory, seedDefaultChecklist, resetChecklist,
             checkModal, openCheckModal, saveCheckModal, deleteCheckFromModal, isCheckNameInvalid,
-            CHECKLIST_CATEGORIES, LUGGAGE_META, showCalc, calcAmount, previewImages, previewIndex, openPreview, closePreview, prevPreviewImage, nextPreviewImage, handleTouchStart, handleTouchEnd
-
+            CHECKLIST_CATEGORIES, LUGGAGE_META, showCalc, calcAmount, previewImages, previewIndex, openPreview, closePreview, prevPreviewImage, nextPreviewImage
         };
     }
 }).mount('#app')
