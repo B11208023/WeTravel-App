@@ -1753,23 +1753,21 @@
                 </div>
             </transition>
         </div>
-        <!-- 使用 teleport 將放大燈箱直接傳送到 body，解決 PWA 模式下的容器裁切與觸控問題 -->
+        <!-- 使用 teleport 將放大燈箱傳送到 body，點擊背景不會關閉，只能按右上角叉叉 -->
         <teleport to="body">
             <transition name="fade">
                 <div v-if="previewImageUrl" 
-                    @click="previewImageUrl = null"
                     class="fixed inset-0 z-[99999] bg-black/90 backdrop-blur-md flex items-center justify-center p-4 select-none touch-none">
             
-                    <!-- 右上角關閉按鈕 -->
-                    <button @click.stop="previewImageUrl = null" 
+                    <!-- 右上角關閉叉叉按鈕（唯一關閉管道） -->
+                    <button @click="previewImageUrl = null" 
                         aria-label="關閉預覽"
-                        class="absolute top-6 right-6 w-12 h-12 rounded-full bg-white/20 text-white flex items-center justify-center hover:bg-white/40 active:scale-95 transition z-[100000] border border-white/30 backdrop-blur-md shadow-lg">
+                        class="absolute top-6 right-6 w-12 h-12 rounded-full bg-white/20 text-white flex items-center justify-center hover:bg-white/40 active:scale-95 transition z-[100000] border border-white/30 backdrop-blur-md shadow-lg cursor-pointer">
                         <i class="ph-bold ph-x text-2xl"></i>
                     </button>
 
                     <!-- 放大顯示的照片本體 -->
                     <img :src="previewImageUrl" 
-                        @click.stop
                         class="max-w-full max-h-[85vh] object-contain rounded-2xl shadow-2xl transition-transform duration-300">
                 </div>
             </transition>
