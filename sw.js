@@ -1,4 +1,4 @@
-const CACHE_NAME = 'wetravel-v122';
+const CACHE_NAME = 'wetravel-v123'; // 建議升級版本號
 const ASSETS = [
   './index.html',
   './manifest.json',
@@ -24,11 +24,12 @@ const NO_CACHE_PATTERNS = [
   'api.open-meteo.com',
   'api.exchangerate-api.com',
   'firebase',
+  'google.com/images/cleardot.gif',
   'app.js',
   'checklist-data.js'
 ];
 
-// 需要 Network First 的檔案（確保每次開啟都拿最新版）
+// 需要 Network First 的檔案
 const NETWORK_FIRST_PATTERNS = [
   'index.html',
   'manifest.json'
@@ -61,35 +62,41 @@ self.addEventListener('activate', event => {
 });
 
 self.addEventListener('fetch', (event) => {
-  const url = event.request.url;
+  const request = event.request;
+  const url = request.url;
 
-  // 如果請求符合不快取的模式，直接走網路
-  const shouldSkipCache = NO_CACHE_PATTERNS.some(pattern => url.includes(pattern));
-  if (shouldSkipCache) {
-    event.respondWith(
-      fetch(event.request).catch(() => caches.match(event.request))
-    );
+  // 1. 只有 GET 請求能進快取機制（Firestore 的 POST/OPTIONS 請求直接忽略）
+  if (request.method !== 'GET') {
     return;
   }
 
-  // index.html 和 manifest.json：Network First（優先拿最新版，離線時用快取）
+  // 2. 如果請求符合 NO_CACHE_PATTERNS，【直接不呼叫 respondWith】，完全交給瀏覽器原生網路處理！
+  const shouldSkipCache = NO_CACHE_PATTERNS.some(pattern => url.includes(pattern));
+  if (shouldSkipCache) {
+    return; // 🔥 這一步是關鍵修復：不經由 Service Worker 攔截，徹底解決 Channel Closed 錯！
+  }
+
+  // 3. Network First (index.html, manifest.json)
   const isNetworkFirst = NETWORK_FIRST_PATTERNS.some(pattern => url.includes(pattern));
   if (isNetworkFirst) {
     event.respondWith(
-      fetch(event.request)
+      fetch(request)
         .then(response => {
-          // 拿到新版後更新快取
-          const clone = response.clone();
-          caches.open(CACHE_NAME).then(cache => cache.put(event.request, clone));
+          if (response && response.status === 200) {
+            const clone = response.clone();
+            caches.open(CACHE_NAME).then(cache => cache.put(request, clone));
+          }
           return response;
         })
-        .catch(() => caches.match(event.request))
+        .catch(() => caches.match(request))
     );
     return;
   }
 
-  // 其餘靜態資源（字體、圖示庫等）：快取優先，找不到再走網路
+  // 4. 其餘靜態資源：快取優先
   event.respondWith(
-    caches.match(event.request).then((response) => response || fetch(event.request))
+    caches.match(request).then((response) => {
+      return response || fetch(request);
+    })
   );
 });
