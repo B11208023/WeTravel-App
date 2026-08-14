@@ -89,7 +89,7 @@ const T = [
     ['clothes', '帽子', 'checked', '造型與遮陽'],
     ['clothes', '太陽眼鏡', 'carry', ''],
     ['kids', '泳衣', 'checked', ''],
-    ['kids', '尿布', 'checked', ''],
+    ['kids', '尿布', 'any', ''],
     ['kids', '食物剪', 'checked', ''],
     ['misc', '折疊傘 / 雨衣', 'checked', '隨身需看安檢規定'],
     ['misc', '髒衣收納袋', 'checked', '乾濕分離'],
