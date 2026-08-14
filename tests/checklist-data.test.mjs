@@ -3,7 +3,7 @@ import { CHECKLIST_CATEGORIES, LUGGAGE_META, CHECKLIST_TEMPLATE } from '../check
 
 const slugs = CHECKLIST_CATEGORIES.map(c => c.slug);
 assert.equal(CHECKLIST_CATEGORIES.length, 8, '分類必須 8 類');
-assert.deepEqual(slugs, ['docs', 'tech', 'meds', 'toiletry', 'makeup', 'clothes', 'flight', 'misc'], '分類順序照 spec');
+assert.deepEqual(slugs, ['docs', 'tech', 'meds', 'toiletry', 'makeup', 'clothes', 'kids', 'misc'], '分類順序照 spec');
 assert.deepEqual(Object.keys(LUGGAGE_META), ['carry', 'any', 'checked'], '行李位置三態');
 
 assert.equal(CHECKLIST_TEMPLATE.length, 75, '模板必須 75 項');
@@ -16,5 +16,5 @@ for (const t of CHECKLIST_TEMPLATE) {
     assert.ok(!('id' in t) && !('checkedBy' in t), '模板不含 id/checkedBy，seed 時才補');
     byCat[t.category] = (byCat[t.category] || 0) + 1;
 }
-assert.deepEqual(byCat, { docs: 10, tech: 11, meds: 7, toiletry: 21, makeup: 9, clothes: 10, flight: 3, misc: 4 }, '各分類項數照 spec 附錄A');
+assert.deepEqual(byCat, { docs: 10, tech: 11, meds: 7, toiletry: 21, makeup: 9, clothes: 10, kids: 3, misc: 4 }, '各分類項數照 spec 附錄A');
 console.log('checklist-data.test.mjs: all assertions passed ✓');
